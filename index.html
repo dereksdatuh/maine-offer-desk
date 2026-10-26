@@ -189,7 +189,8 @@ footer.foot .inner { position: relative; z-index: 1; max-width: 1180px; margin: 
         </div>
         <legend style="margin-top:24px">Costs</legend>
         <div class="rows">
-          <div class="row"><label for="c-fees">Lender and title fees<small>Ask Derek for a real number</small></label><input type="text" inputmode="numeric" id="c-fees" placeholder="enter $"></div>
+          <div class="row"><label for="c-title">Title fees<small>Filled in from the price. Type over it to change</small></label><input type="text" inputmode="numeric" id="c-title" placeholder="auto"></div>
+          <div class="row"><label for="c-lender">Lender fees<small>Ask Derek for a real number</small></label><input type="text" inputmode="numeric" id="c-lender" placeholder="enter $"></div>
           <div class="row"><label for="c-tax">Annual property tax<small>From the listing or town</small></label><input type="text" inputmode="numeric" id="c-tax" value="5,800"></div>
           <div class="row"><label for="c-ins">Annual homeowners insurance<small>Get a quote early in Maine</small></label><input type="text" inputmode="numeric" id="c-ins" value="1,800"></div>
           <div class="row"><label for="c-taxmo">Months of tax held in escrow<small>Lenders often hold 2 to 6</small></label><input type="text" inputmode="numeric" id="c-taxmo" value="3"></div>
@@ -340,15 +341,21 @@ footer.foot .inner { position: relative; z-index: 1; max-width: 1180px; margin: 
     const ltv = downEntered && !isCash ? 100 - downPct : null;
     const emd = num($('c-emd').value);
     const credit = num($('c-credit').value);
-    const feesEntered = has($('c-fees').value);
-    const fees = num($('c-fees').value);
+    const feesEntered = isCash || has($('c-lender').value);
+    const fees = isCash ? 0 : num($('c-lender').value);
+    // Title fees: title insurance and settlement at price x 0.35% + $100, abstract $695, two $40 title charges.
+    const titleIns = price > 0 ? price * 0.0035 + 100 : 0;
+    const titleAuto = price > 0 ? titleIns + 695 + 40 + 40 : 0;
+    const titleOverride = has($('c-title').value);
+    const title = titleOverride ? num($('c-title').value) : titleAuto;
+    $('c-title').placeholder = usd(titleAuto);
     const tax = num($('c-tax').value), ins = num($('c-ins').value);
     const taxMo = num($('c-taxmo').value), insMo = num($('c-insmo').value);
     const tt = transferTax(price);
 
     const insYear = ins;
     const escrow = isCash ? 0 : tax / 12 * taxMo + ins / 12 * insMo;
-    const costs = (feesEntered ? fees : 0) + tt.half + insYear + escrow;
+    const costs = fees + title + tt.half + insYear + escrow;
 
     const checks = [];
     const cap = concessionCap(type, occ, ltv);
@@ -367,10 +374,10 @@ footer.foot .inner { position: relative; z-index: 1; max-width: 1180px; margin: 
       }
     }
     if (credit > 0 && usableCredit > costs) {
-      checks.push(['warn', '!', feesEntered ? 'The credit is more than the buyer\'s closing costs and prepaids shown. Credit cannot go toward the down payment, so the extra is usually lost. Trim the credit or confirm costs with Derek.' : 'Only ' + usd(costs) + ' of the credit counts until lender and title fees are entered. Credit cannot go toward the down payment.']);
+      checks.push(['warn', '!', feesEntered ? 'The credit is more than the buyer\'s closing costs and prepaids shown. Credit cannot go toward the down payment, so the extra is usually lost. Trim the credit or confirm costs with Derek.' : 'Only ' + usd(costs) + ' of the credit counts until lender fees are entered. Credit cannot go toward the down payment.']);
       usableCredit = costs;
     }
-    if (!feesEntered && !isCash) checks.push(['info', 'i', 'Lender and title fees are left out until you enter them. Text Derek the price and loan type for a real fee estimate.']);
+    if (!feesEntered) checks.push(['info', 'i', 'Lender fees are left out until you enter them. Text Derek the price and loan type for a real fee estimate.']);
     if (!downEntered) checks.push(['info', 'i', 'Enter the buyer\'s down payment % to include it.']);
     if (!isCash) checks.push(['info', 'i', 'Not shown: prepaid interest from closing day to month end and any property tax proration, which varies by town. Both are on the Loan Estimate and closing disclosure.']);
     if (type === 'va') checks.push(['info', 'i', 'VA funding fee is usually rolled into the loan, so it is not counted here. Buyers with a service-connected disability rating are generally exempt.']);
@@ -381,7 +388,8 @@ footer.foot .inner { position: relative; z-index: 1; max-width: 1180px; margin: 
     let rows = '';
     if (downEntered) rows += lineRow(isCash ? 'Purchase price' : 'Down payment', usd(down), isCash ? '' : downPct + '% of price');
     rows += lineRow('Maine transfer tax, buyer half', usd(tt.half), 'Seller pays the other ' + usd(tt.half));
-    if (!isCash) rows += lineRow('Lender and title fees', feesEntered ? usd(fees) : 'Ask Derek');
+    rows += lineRow('Title fees', usd(title), titleOverride ? 'Your figure' : 'Title insurance and settlement ' + usd(titleIns) + ', abstract $695, other title charges $80');
+    if (!isCash) rows += lineRow('Lender fees', feesEntered ? usd(fees) : 'Ask Derek');
     rows += lineRow('First year of homeowners insurance', usd(insYear));
     if (!isCash) rows += lineRow('Escrow deposit, tax and insurance', usd(escrow), taxMo + ' mo tax, ' + insMo + ' mo insurance');
     if (usableCredit > 0) rows += lineRow('Seller credit', '-' + usd(usableCredit));
@@ -392,7 +400,7 @@ footer.foot .inner { position: relative; z-index: 1; max-width: 1180px; margin: 
     document.querySelector('#cash .result .label').textContent = total < 0 ? 'Estimated amount back to the buyer at closing' : 'Estimated cash to bring to closing';
     const missing = [];
     if (!downEntered) missing.push('down payment');
-    if (!feesEntered && !isCash) missing.push('lender and title fees');
+    if (!feesEntered) missing.push('lender fees');
     $('c-note').textContent = missing.length ? 'Estimate only, before ' + missing.join(' and ') + '.' : 'Estimate only. Not a Loan Estimate.';
     $('c-checks').innerHTML = checks.map((c) => '<li class="' + c[0] + '"><span class="tag">' + c[1] + '</span><span>' + esc(c[2]) + '</span></li>').join('');
 
@@ -400,7 +408,8 @@ footer.foot .inner { position: relative; z-index: 1; max-width: 1180px; margin: 
     cashText = 'Rough cash to close, ' + typeName + ', ' + usd(price) + ' purchase:\n' +
       (downEntered ? (isCash ? 'Price: ' : 'Down payment: ') + usd(down) + '\n' : '') +
       'Maine transfer tax (buyer half): ' + usd(tt.half) + '\n' +
-      (!isCash ? 'Lender and title fees: ' + (feesEntered ? usd(fees) : 'not included yet') + '\n' : '') +
+      'Title fees: ' + usd(title) + '\n' +
+      (!isCash ? 'Lender fees: ' + (feesEntered ? usd(fees) : 'not included yet') + '\n' : '') +
       'First year insurance: ' + usd(insYear) + '\n' +
       (!isCash ? 'Escrow deposit: ' + usd(escrow) + '\n' : '') +
       (usableCredit > 0 ? 'Seller credit: -' + usd(usableCredit) + '\n' : '') +
@@ -509,7 +518,7 @@ footer.foot .inner { position: relative; z-index: 1; max-width: 1180px; margin: 
   const NAME = { conv: 'Conventional', fha: 'FHA', va: 'VA', usda: 'USDA' };
   const PROPS = [
     { id: 'well', label: 'Private well', items: [
-      { who: ['va'], text: 'VA usually needs a water test on a private well, with the sample drawn by someone other than the buyer or seller. Order it early; lab results can take a week or more.' },
+      { who: ['va'], text: 'VA requires a water test on a private well, and a third party has to draw the sample (not the buyer, seller or agent). The test covers 4 items: coliform bacteria, nitrates, nitrites and lead. Order it early; lab results can take a week or more.' },
       { who: ['usda'], text: 'USDA needs the water to be safe to drink, and most lenders ask for a water test. Plan on one.' },
       { who: ['fha'], text: 'On an existing home, usually no water test is needed unless the appraiser flags the well, local rules require one, or it is new construction or a new well.' },
       { who: ['conv'], text: 'Usually no water test unless the appraiser calls for one.' },
@@ -637,7 +646,6 @@ footer.foot .inner { position: relative; z-index: 1; max-width: 1180px; margin: 
   calcCash(); calcOffers(); calcProps();
 })();
 </script>
-
 <script>
 if ('serviceWorker' in navigator) { window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js').catch(() => {}); }); }
 </script>
