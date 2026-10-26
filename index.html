@@ -345,7 +345,9 @@ footer.foot .inner { position: relative; z-index: 1; max-width: 1180px; margin: 
     const fees = isCash ? 0 : num($('c-lender').value);
     // Title fees: title insurance and settlement at price x 0.35% + $100, abstract $695, two $40 title charges.
     const titleIns = price > 0 ? price * 0.0035 + 100 : 0;
-    const titleAuto = price > 0 ? titleIns + 695 + 40 + 40 : 0;
+    // Owner's title: about 0.15% of price (Derek's example: $544 on a deal whose $1,351 title fee implies about $357k). Recording: $40 + $40.
+    const ownersTitle = price > 0 ? price * 0.0015 : 0;
+    const titleAuto = price > 0 ? titleIns + 695 + ownersTitle + 80 : 0;
     const titleOverride = has($('c-title').value);
     const title = titleOverride ? num($('c-title').value) : titleAuto;
     $('c-title').placeholder = usd(titleAuto);
@@ -388,7 +390,7 @@ footer.foot .inner { position: relative; z-index: 1; max-width: 1180px; margin: 
     let rows = '';
     if (downEntered) rows += lineRow(isCash ? 'Purchase price' : 'Down payment', usd(down), isCash ? '' : downPct + '% of price');
     rows += lineRow('Maine transfer tax, buyer half', usd(tt.half), 'Seller pays the other ' + usd(tt.half));
-    rows += lineRow('Title fees', usd(title), titleOverride ? 'Your figure' : 'Title insurance and settlement ' + usd(titleIns) + ', abstract $695, other title charges $80');
+    rows += lineRow('Title fees', usd(title), titleOverride ? 'Your figure' : 'Title insurance and settlement ' + usd(titleIns) + ', abstract $695, owner\'s title insurance ' + usd(ownersTitle) + ', recording $80');
     if (!isCash) rows += lineRow('Lender fees', feesEntered ? usd(fees) : 'Ask Derek');
     rows += lineRow('First year of homeowners insurance', usd(insYear));
     if (!isCash) rows += lineRow('Escrow deposit, tax and insurance', usd(escrow), taxMo + ' mo tax, ' + insMo + ' mo insurance');
