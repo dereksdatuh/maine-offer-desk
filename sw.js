@@ -1,5 +1,5 @@
 // Keeps the app working with no signal. Bump VERSION when any file changes.
-const VERSION = 'offer-desk-v3';
+const VERSION = 'offer-desk-v4';
 const FILES = ['./', 'index.html', 'manifest.webmanifest', 'img/logo.png', 'img/eho.png', 'img/icon-192.png', 'img/icon-512.png', 'img/apple-touch-icon.png',
   'fonts/Archivo-400.ttf', 'fonts/Archivo-500.ttf', 'fonts/Archivo-600.ttf', 'fonts/Archivo-700.ttf', 'fonts/Archivo-800.ttf', 'fonts/ZillaSlab-700.ttf'];
 self.addEventListener('install', (e) => { e.waitUntil(caches.open(VERSION).then((c) => c.addAll(FILES)).then(() => self.skipWaiting())); });
