@@ -1,0 +1,645 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Maine Offer Desk by Derek Smith, Loan Officer at Baxter Mortgage: buyer cash to close, offer comparison and property financing checks for Maine deals.">
+<meta name="theme-color" content="#E9EAEC">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="img/icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Offer Desk">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>Maine Offer Desk</title>
+<style>
+@font-face{font-family:'Archivo';font-weight:400;font-display:swap;src:url('fonts/Archivo-400.ttf') format('truetype')}
+@font-face{font-family:'Archivo';font-weight:500;font-display:swap;src:url('fonts/Archivo-500.ttf') format('truetype')}
+@font-face{font-family:'Archivo';font-weight:600;font-display:swap;src:url('fonts/Archivo-600.ttf') format('truetype')}
+@font-face{font-family:'Archivo';font-weight:700;font-display:swap;src:url('fonts/Archivo-700.ttf') format('truetype')}
+@font-face{font-family:'Archivo';font-weight:800;font-display:swap;src:url('fonts/Archivo-800.ttf') format('truetype')}
+@font-face{font-family:'Zilla Slab';font-weight:700;font-display:swap;src:url('fonts/ZillaSlab-700.ttf') format('truetype')}
+html,body{margin:0}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+[hidden]{display:none!important}
+img{max-width:100%}
+/* Layout: local-office flyer turned working desk. Fog page, one light diagonal plane top right,
+   ruled input sheets left, a cream "nameplate" result box right, slate + cream wedge at the foot. */
+:root {
+  --fog: #E9EAEC;
+  --fog-light: #F2F2F3;
+  --ink: #141C27;
+  --slate: #50555D;
+  --cream: #ECEDDA;
+  --green: #119F6A;
+  --white: #FFFFFF;
+  --warn: #8A4B12;
+  --display: 'Archivo', 'Arial Narrow', Arial, sans-serif;
+  --slab: 'Zilla Slab', 'Rockwell', Georgia, serif;
+  --body: 'Archivo', Arial, sans-serif;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+body { background: var(--fog); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.45; position: relative; overflow-x: hidden; }
+body::after { content: ""; position: absolute; top: 0; right: 0; width: 58%; height: 520px; background: var(--fog-light); clip-path: polygon(38% 0, 100% 0, 100% 100%); z-index: 0; pointer-events: none; }
+.wrap { position: relative; z-index: 1; max-width: 1180px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 24px 0; }
+header.top { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; }
+header.top img { width: 230px; height: auto; display: block; }
+.nameplate { background: var(--cream); border: 5px solid var(--slate); padding: 8px 16px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; font-size: 15px; }
+h1 { font-family: var(--display); font-weight: 800; text-transform: uppercase; letter-spacing: -0.01em; font-size: clamp(36px, 6.4vw, 72px); line-height: 0.98; margin: 40px 0 0; text-wrap: balance; }
+h1 .accent { display: block; font-family: var(--slab); font-weight: 700; text-transform: none; color: var(--green); font-size: 1.18em; letter-spacing: 0; line-height: 1.05; }
+.lede { max-width: 62ch; font-size: 18px; margin: 16px 0 0; }
+.lede b { font-weight: 600; }
+
+nav.tabs { display: flex; gap: 0; margin-top: 32px; border-bottom: 2px solid var(--slate); flex-wrap: wrap; }
+nav.tabs button { font: 700 15px/1 var(--body); text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink); background: transparent; border: 2px solid transparent; border-bottom: 0; padding: 14px 18px; cursor: pointer; margin-bottom: -2px; }
+nav.tabs button .n { font-family: var(--slab); color: var(--green); margin-right: 8px; font-size: 18px; }
+nav.tabs button[aria-selected="true"] { background: var(--fog-light); border-color: var(--slate); border-bottom: 2px solid var(--fog-light); }
+nav.tabs button:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px solid var(--green); outline-offset: 2px; }
+
+.panel { background: var(--fog-light); border: 2px solid var(--slate); border-top: 0; padding: 32px 24px; }
+.panel h2 { font-family: var(--display); font-weight: 800; text-transform: uppercase; font-size: 26px; margin: 0; letter-spacing: -0.01em; }
+.panel .sub { margin: 8px 0 0; max-width: 70ch; color: var(--slate); }
+.grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; margin-top: 24px; align-items: start; }
+@media (max-width: 860px) { .grid { grid-template-columns: minmax(0, 1fr); } }
+
+fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
+legend { font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; font-size: 13px; color: var(--slate); padding: 0; margin-bottom: 8px; }
+.rows { border-top: 2px solid var(--slate); }
+.row { display: grid; grid-template-columns: minmax(0, 1fr) 170px; gap: 16px; align-items: center; padding: 10px 0; border-bottom: 2px solid var(--slate); }
+.row label { font-weight: 500; }
+.row label small { display: block; font-weight: 400; color: var(--slate); font-size: 13px; }
+input[type="text"], input[type="number"], input[type="date"], select { width: 100%; font: 500 16px var(--body); color: var(--ink); background: var(--white); border: 2px solid var(--slate); border-radius: 0; padding: 8px 10px; font-variant-numeric: tabular-nums; }
+input::placeholder { color: #7d828a; }
+@media (max-width: 480px) { .row { grid-template-columns: minmax(0, 1fr) 132px; } }
+
+.result { background: var(--cream); border: 5px solid var(--slate); padding: 24px; }
+.result .label { font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; font-size: 13px; }
+.big { font-family: var(--display); font-weight: 800; font-size: clamp(40px, 7vw, 60px); line-height: 1; margin: 8px 0 4px; font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+.big-note { color: var(--slate); font-size: 14px; margin: 0; }
+table.lines { width: 100%; border-collapse: collapse; margin-top: 16px; font-variant-numeric: tabular-nums; }
+table.lines td { padding: 8px 0; border-top: 2px solid var(--slate); vertical-align: top; }
+table.lines td:last-child { text-align: right; white-space: nowrap; padding-left: 16px; font-weight: 600; }
+table.lines tr.total td { font-weight: 800; }
+table.lines td small { display: block; color: var(--slate); font-weight: 400; font-size: 13px; }
+.checks { list-style: none; padding: 0; margin: 16px 0 0; display: grid; gap: 8px; }
+.checks li { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 8px; align-items: start; }
+.checks li .tag { font-family: var(--slab); font-weight: 700; font-size: 18px; line-height: 1.3; }
+.checks li.ok .tag { color: var(--green); }
+.checks li.warn .tag { color: var(--warn); }
+.checks li.info .tag { color: var(--slate); }
+
+.actions { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; margin-top: 24px; }
+button.primary { font: 700 15px/1 var(--body); text-transform: uppercase; letter-spacing: 0.06em; background: var(--ink); color: var(--white); border: 0; border-radius: 0; padding: 14px 18px; cursor: pointer; }
+button.primary:hover { background: var(--slate); }
+button.plain { font: 600 15px/1 var(--body); background: transparent; color: var(--ink); border: 2px solid var(--slate); border-radius: 0; padding: 12px 16px; cursor: pointer; }
+.copied { font-weight: 600; color: var(--green); }
+textarea.fallback { width: 100%; min-height: 160px; margin-top: 12px; font: 14px/1.4 var(--body); border: 2px solid var(--slate); padding: 8px; }
+
+/* Offer comparison */
+.offers { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 24px; }
+@media (max-width: 960px) { .offers { grid-template-columns: minmax(0, 1fr); } }
+.offer { border: 2px solid var(--slate); background: var(--white); padding: 16px; min-width: 0; }
+.offer h3 { margin: 0 0 8px; font-family: var(--display); font-weight: 800; text-transform: uppercase; font-size: 20px; display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+.offer h3 .best { font: 700 12px var(--body); letter-spacing: 0.06em; background: var(--cream); border: 2px solid var(--slate); padding: 4px 8px; }
+.offer .row { grid-template-columns: minmax(0, 1fr) 140px; }
+.offer .net { font-family: var(--display); font-weight: 800; font-size: 34px; margin: 16px 0 0; font-variant-numeric: tabular-nums; }
+.offer .net-label { font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; font-size: 12px; color: var(--slate); }
+.shared { max-width: 640px; margin-top: 24px; }
+
+/* Property checks */
+.props { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 24px; border-top: 2px solid var(--slate); }
+@media (max-width: 600px) { .props { grid-template-columns: minmax(0, 1fr); } }
+.props label { display: grid; grid-template-columns: 24px minmax(0, 1fr); gap: 10px; padding: 10px 0; border-bottom: 2px solid var(--slate); cursor: pointer; font-weight: 500; align-items: start; }
+.props input[type="checkbox"] { width: 20px; height: 20px; margin: 2px 0 0; accent-color: var(--green); }
+.loanpick { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
+.loanpick label { border: 2px solid var(--slate); padding: 8px 12px; cursor: pointer; font-weight: 600; background: var(--white); display: flex; gap: 8px; align-items: center; }
+.loanpick input { accent-color: var(--green); }
+.flags { margin-top: 24px; display: grid; gap: 16px; }
+.flag { border: 2px solid var(--slate); background: var(--white); padding: 16px; min-width: 0; }
+.flag h4 { margin: 0; font-weight: 800; text-transform: uppercase; font-size: 16px; letter-spacing: 0.02em; }
+.flag p { margin: 8px 0 0; max-width: 75ch; }
+.flag .who { font-weight: 700; }
+.empty { color: var(--slate); margin-top: 16px; }
+
+/* Footer with the signature wedge */
+footer.foot { position: relative; margin-top: 48px; background: var(--fog); overflow: hidden; }
+footer.foot .inner { position: relative; z-index: 1; max-width: 1180px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 32px 40px; }
+.contact { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 32px; align-items: start; padding-right: 160px; }
+@media (max-width: 760px) { .contact { grid-template-columns: minmax(0, 1fr); padding-right: 0; } }
+.contact h2 { font-family: var(--display); font-weight: 800; text-transform: uppercase; font-size: 30px; line-height: 1; margin: 0; letter-spacing: -0.01em; }
+.contact h2 .accent { display: block; font-family: var(--slab); color: var(--green); text-transform: none; font-size: 1.15em; letter-spacing: 0; }
+.contact p { margin: 12px 0 0; max-width: 52ch; }
+.numbers { border-top: 2px solid var(--slate); }
+.numbers div { display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 2px solid var(--slate); flex-wrap: wrap; }
+.numbers span:first-child { font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; font-size: 13px; }
+.numbers span:last-child { font-weight: 600; user-select: all; font-variant-numeric: tabular-nums; }
+.legal { margin-top: 32px; padding-right: 160px; font-size: 13px; color: var(--slate); max-width: 900px; }
+.legal p { margin: 0 0 8px; }
+.legal .id { color: var(--ink); font-weight: 600; font-size: 14px; }
+@media (max-width: 760px) { .legal { padding-right: 120px; } }
+.wedge { position: absolute; right: 0; bottom: 0; width: 220px; height: 220px; z-index: 0; }
+.wedge::before { content: ""; position: absolute; inset: 0; background: var(--cream); clip-path: polygon(100% 0, 100% 100%, 0 100%); }
+.wedge::after { content: ""; position: absolute; inset: 0; background: var(--slate); clip-path: polygon(100% 14%, 100% 100%, 14% 100%); }
+.wedge img { position: absolute; right: 22px; bottom: 22px; width: 64px; z-index: 1; }
+@media (max-width: 760px) { .wedge { width: 140px; height: 140px; } .wedge img { width: 46px; right: 14px; bottom: 14px; } }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <img src="img/logo.png" alt="Baxter Mortgage">
+    <div class="nameplate">Maine Offer Desk</div>
+  </header>
+
+  <h1>Run the numbers <span class="accent">before you write it</span></h1>
+  <p class="lede">Three quick tools for Maine deals: what your buyer needs to bring to closing, which offer really nets your seller more, and what a property's well, septic, foundation or road could mean for financing. <b>Nothing you type leaves this page.</b></p>
+
+  <nav class="tabs" role="tablist" aria-label="Tools">
+    <button role="tab" id="tab-cash" aria-controls="cash" aria-selected="true"><span class="n">1</span>Buyer cash to close</button>
+    <button role="tab" id="tab-offers" aria-controls="offers" aria-selected="false"><span class="n">2</span>Compare offers</button>
+    <button role="tab" id="tab-property" aria-controls="property" aria-selected="false"><span class="n">3</span>Property checks</button>
+  </nav>
+
+  <!-- 1. CASH TO CLOSE -->
+  <section class="panel" id="cash" role="tabpanel" aria-labelledby="tab-cash">
+    <h2>Buyer cash to close</h2>
+    <p class="sub">A rough number before the Loan Estimate shows up. The sample figures are examples; type over them. Seller credit limits are checked for the loan type you pick.</p>
+    <div class="grid">
+      <fieldset>
+        <legend>The deal</legend>
+        <div class="rows">
+          <div class="row"><label for="c-price">Purchase price</label><input type="text" inputmode="numeric" id="c-price" value="425,000"></div>
+          <div class="row"><label for="c-type">Loan type</label>
+            <select id="c-type">
+              <option value="conv">Conventional</option>
+              <option value="fha">FHA</option>
+              <option value="va">VA</option>
+              <option value="usda">USDA</option>
+              <option value="cash">Cash, no loan</option>
+            </select></div>
+          <div class="row"><label for="c-occ">Buyer will live there?</label>
+            <select id="c-occ"><option value="primary">Yes, primary home</option><option value="second">Second home</option><option value="invest">Investment</option></select></div>
+          <div class="row" id="c-down-row"><label for="c-down">Down payment, % of price<small>Enter your buyer's plan</small></label><input type="text" inputmode="decimal" id="c-down" placeholder="enter %"></div>
+          <div class="row"><label for="c-emd">Earnest money already paid</label><input type="text" inputmode="numeric" id="c-emd" placeholder="enter $"></div>
+          <div class="row"><label for="c-credit">Seller credit in the offer</label><input type="text" inputmode="numeric" id="c-credit" placeholder="enter $"></div>
+        </div>
+        <legend style="margin-top:24px">Costs</legend>
+        <div class="rows">
+          <div class="row"><label for="c-fees">Lender and title fees<small>Ask Derek for a real number</small></label><input type="text" inputmode="numeric" id="c-fees" placeholder="enter $"></div>
+          <div class="row"><label for="c-tax">Annual property tax<small>From the listing or town</small></label><input type="text" inputmode="numeric" id="c-tax" value="5,800"></div>
+          <div class="row"><label for="c-ins">Annual homeowners insurance<small>Get a quote early in Maine</small></label><input type="text" inputmode="numeric" id="c-ins" value="1,800"></div>
+          <div class="row"><label for="c-taxmo">Months of tax held in escrow<small>Lenders often hold 2 to 6</small></label><input type="text" inputmode="numeric" id="c-taxmo" value="3"></div>
+          <div class="row"><label for="c-insmo">Months of insurance held in escrow</label><input type="text" inputmode="numeric" id="c-insmo" value="2"></div>
+        </div>
+      </fieldset>
+
+      <div class="result" aria-live="polite">
+        <div class="label">Estimated cash to bring to closing</div>
+        <div class="big" id="c-total">$0</div>
+        <p class="big-note" id="c-note">Estimate only. Not a Loan Estimate.</p>
+        <table class="lines" id="c-lines"></table>
+        <ul class="checks" id="c-checks"></ul>
+        <div class="actions">
+          <button class="primary" id="c-copy">Copy for your buyer</button>
+          <span class="copied" id="c-copied" hidden>Copied. Paste it in a text or email.</span>
+        </div>
+        <textarea class="fallback" id="c-fallback" hidden aria-label="Summary to copy"></textarea>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. OFFER COMPARISON -->
+  <section class="panel" id="offers" role="tabpanel" aria-labelledby="tab-offers" hidden>
+    <h2>Compare offers</h2>
+    <p class="sub">Highest price is not always the best offer. Put up to three offers side by side and see the seller's estimated net, plus what happens if the appraisal comes in short. Sample offers shown; type over them.</p>
+
+    <fieldset class="shared">
+      <legend>Same for every offer</legend>
+      <div class="rows">
+        <div class="row"><label for="o-comm">Total commission, % of price<small>Whatever the listing agreement says</small></label><input type="text" inputmode="decimal" id="o-comm" placeholder="enter %"></div>
+      </div>
+      <legend style="margin-top:24px">Seller closing costs</legend>
+      <div class="rows">
+        <div class="row"><label for="s-title">Seller's title or settlement fee<small>Ask the title company</small></label><input type="text" inputmode="numeric" id="s-title" class="scost" value="650"></div>
+        <div class="row"><label for="s-deed">Deed prep and mortgage discharge<small>Seller's attorney, recording</small></label><input type="text" inputmode="numeric" id="s-deed" class="scost" value="400"></div>
+        <div class="row"><label for="s-tax">Property tax the seller owes at closing<small>Proration, varies by town</small></label><input type="text" inputmode="numeric" id="s-tax" class="scost" placeholder="enter $"></div>
+        <div class="row"><label for="s-repairs">Repairs the seller agreed to</label><input type="text" inputmode="numeric" id="s-repairs" class="scost" placeholder="enter $"></div>
+        <div class="row"><label for="s-other">Anything else<small>Water and sewer, HOA dues, home warranty</small></label><input type="text" inputmode="numeric" id="s-other" class="scost" placeholder="enter $"></div>
+        <div class="row"><label for="o-appr">What could it appraise at?<small>Optional. Your gut or the comps</small></label><input type="text" inputmode="numeric" id="o-appr" value="430,000"></div>
+      </div>
+    </fieldset>
+
+    <div class="offers" id="o-list"></div>
+    <div class="actions">
+      <button class="primary" id="o-copy">Copy for your seller</button>
+      <span class="copied" id="o-copied" hidden>Copied. Paste it in a text or email.</span>
+    </div>
+    <textarea class="fallback" id="o-fallback" hidden aria-label="Summary to copy"></textarea>
+  </section>
+
+  <!-- 3. PROPERTY CHECKS -->
+  <section class="panel" id="property" role="tabpanel" aria-labelledby="tab-property" hidden>
+    <h2>Property checks</h2>
+    <p class="sub">Tick what you know about the house and the buyer's loan type. You get the Maine and financing items worth sorting out before the offer, not after the appraisal.</p>
+
+    <div class="grid">
+      <fieldset>
+        <legend>The property has</legend>
+        <div class="props" id="p-list"></div>
+      </fieldset>
+      <fieldset>
+        <legend>Buyer's loan type</legend>
+        <div class="loanpick" id="p-loans">
+          <label><input type="checkbox" value="conv" checked> Conventional</label>
+          <label><input type="checkbox" value="fha" checked> FHA</label>
+          <label><input type="checkbox" value="va"> VA</label>
+          <label><input type="checkbox" value="usda"> USDA</label>
+        </div>
+        <div class="flags" id="p-flags" aria-live="polite"></div>
+        <div class="actions">
+          <button class="primary" id="p-copy">Copy this checklist</button>
+          <span class="copied" id="p-copied" hidden>Copied. Paste it in a text or email.</span>
+        </div>
+        <textarea class="fallback" id="p-fallback" hidden aria-label="Checklist to copy"></textarea>
+      </fieldset>
+    </div>
+  </section>
+</div>
+
+<footer class="foot">
+  <div class="inner">
+    <div class="contact">
+      <div>
+        <h2>Stuck on a deal? <span class="accent">call me before you write it</span></h2>
+        <p>I'm Derek Smith, a loan officer at Baxter Mortgage in Kennebunk. If a number here looks off, or a property has something weird going on, call or text me. I'd rather sort it out with you up front than at the appraisal.</p>
+      </div>
+      <div class="numbers">
+        <div><span>Cell</span><span>207-468-6998</span></div>
+        <div><span>Office</span><span>(207) 590-4545</span></div>
+        <div><span>Email</span><span>derek@baxtermortgage.com</span></div>
+      </div>
+    </div>
+    <div class="legal">
+      <p class="id">Derek Smith, Loan Officer | NMLS #2810853<br>Baxter Mortgage, LLC | Company NMLS #2752768<br>75 Portland Road, Kennebunk, ME 04043 · Equal Housing Opportunity</p>
+      <p>Everything on this page is an estimate for discussion only, based on the figures you enter. It is not a Loan Estimate, a loan offer, a pre-approval or a commitment to lend. Actual costs, escrow amounts, concession limits and property requirements depend on the lender, the loan program, the appraisal and the title company. All loans are subject to credit approval, underwriting and property eligibility. Maine transfer tax is figured under 36 M.R.S. §4641-A; confirm the final amount with your title company. Coastal shoreland septic inspection: P.L. 2019, c. 43. Licensed in Maine.</p>
+    </div>
+  </div>
+  <div class="wedge" aria-hidden="true"><img src="img/eho.png" alt=""></div>
+</footer>
+
+<script>
+(function () {
+  // ---------- helpers ----------
+  const $ = (id) => document.getElementById(id);
+  const num = (v) => { const n = parseFloat(String(v || '').replace(/[^0-9.\-]/g, '')); return isFinite(n) ? n : 0; };
+  const has = (v) => String(v || '').replace(/[^0-9.]/g, '') !== '';
+  const usd = (n) => (n < 0 ? '-' : '') + '$' + Math.round(Math.abs(n)).toLocaleString('en-US');
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const SIGN = '\n\nQuestions on the financing side? Derek Smith, Loan Officer, Baxter Mortgage. Cell 207-468-6998.\nDerek Smith NMLS #2810853 | Baxter Mortgage, LLC NMLS #2752768 | 75 Portland Road, Kennebunk, ME 04043 | Equal Housing Opportunity\nEstimate only, not a Loan Estimate or commitment to lend. All loans subject to credit approval.';
+
+  // Maine real estate transfer tax, 36 M.R.S. 4641-A: $2.20 per $500 or fraction, plus $3.80 per $500 over $1,000,000. Split 1/2 grantor, 1/2 grantee.
+  function transferTax(value) {
+    if (value <= 0) return { total: 0, half: 0 };
+    let t = Math.ceil(value / 500) * 2.2;
+    if (value > 1000000) t += Math.ceil((value - 1000000) / 500) * 3.8;
+    return { total: t, half: t / 2 };
+  }
+
+  // Seller concession caps as a % of price (or appraised value, if lower). Common agency limits; lenders can be stricter.
+  function concessionCap(type, occ, ltv) {
+    if (type === 'cash') return null;
+    if (type === 'fha') return { pct: 6, note: 'FHA caps seller concessions at 6% of price.' };
+    if (type === 'usda') return { pct: 6, note: 'USDA generally allows up to 6% in seller concessions.' };
+    if (type === 'va') return { pct: 4, note: 'VA caps concessions at 4%, but normal closing costs paid by the seller do not count toward it.', va: true };
+    if (occ === 'invest') return { pct: 2, note: 'Conventional investment property: seller credit limited to 2%.' };
+    if (ltv == null) return { pct: null, note: 'Conventional limit depends on the down payment: 3% under 10% down, 6% with 10 to 25% down, 9% with more than 25% down.' };
+    if (ltv > 90) return { pct: 3, note: 'Conventional with under 10% down: seller credit limited to 3%.' };
+    if (ltv > 75) return { pct: 6, note: 'Conventional with 10 to 25% down: seller credit limited to 6%.' };
+    return { pct: 9, note: 'Conventional with more than 25% down: seller credit limited to 9%.' };
+  }
+
+  function lineRow(label, value, small) {
+    return '<tr><td>' + esc(label) + (small ? '<small>' + esc(small) + '</small>' : '') + '</td><td>' + value + '</td></tr>';
+  }
+
+  // ---------- 1. cash to close ----------
+  let cashText = '';
+  function calcCash() {
+    const price = num($('c-price').value);
+    const type = $('c-type').value;
+    const occ = $('c-occ').value;
+    const isCash = type === 'cash';
+    $('c-down-row').hidden = isCash;
+    const downEntered = isCash || has($('c-down').value);
+    const downPct = isCash ? 100 : Math.min(100, Math.max(0, num($('c-down').value)));
+    const down = price * downPct / 100;
+    const ltv = downEntered && !isCash ? 100 - downPct : null;
+    const emd = num($('c-emd').value);
+    const credit = num($('c-credit').value);
+    const feesEntered = has($('c-fees').value);
+    const fees = num($('c-fees').value);
+    const tax = num($('c-tax').value), ins = num($('c-ins').value);
+    const taxMo = num($('c-taxmo').value), insMo = num($('c-insmo').value);
+    const tt = transferTax(price);
+
+    const insYear = ins;
+    const escrow = isCash ? 0 : tax / 12 * taxMo + ins / 12 * insMo;
+    const costs = (feesEntered ? fees : 0) + tt.half + insYear + escrow;
+
+    const checks = [];
+    const cap = concessionCap(type, occ, ltv);
+    let usableCredit = credit;
+    if (credit > 0 && cap) {
+      if (cap.pct != null) {
+        const capAmt = price * cap.pct / 100;
+        if (!cap.va && credit > capAmt) {
+          usableCredit = capAmt;
+          checks.push(['warn', '!', 'Seller credit of ' + usd(credit) + ' is over the ' + cap.pct + '% limit (' + usd(capAmt) + '). ' + cap.note + ' Consider moving the extra into price or repairs.']);
+        } else {
+          checks.push(['ok', '✓', cap.note + ' This credit fits.']);
+        }
+      } else {
+        checks.push(['info', 'i', cap.note]);
+      }
+    }
+    if (credit > 0 && usableCredit > costs) {
+      checks.push(['warn', '!', feesEntered ? 'The credit is more than the buyer\'s closing costs and prepaids shown. Credit cannot go toward the down payment, so the extra is usually lost. Trim the credit or confirm costs with Derek.' : 'Only ' + usd(costs) + ' of the credit counts until lender and title fees are entered. Credit cannot go toward the down payment.']);
+      usableCredit = costs;
+    }
+    if (!feesEntered && !isCash) checks.push(['info', 'i', 'Lender and title fees are left out until you enter them. Text Derek the price and loan type for a real fee estimate.']);
+    if (!downEntered) checks.push(['info', 'i', 'Enter the buyer\'s down payment % to include it.']);
+    if (!isCash) checks.push(['info', 'i', 'Not shown: prepaid interest from closing day to month end and any property tax proration, which varies by town. Both are on the Loan Estimate and closing disclosure.']);
+    if (type === 'va') checks.push(['info', 'i', 'VA funding fee is usually rolled into the loan, so it is not counted here. Buyers with a service-connected disability rating are generally exempt.']);
+    if (type === 'fha') checks.push(['info', 'i', 'FHA upfront mortgage insurance is usually rolled into the loan, so it is not counted here.']);
+
+    const total = down + costs - usableCredit - emd;
+
+    let rows = '';
+    if (downEntered) rows += lineRow(isCash ? 'Purchase price' : 'Down payment', usd(down), isCash ? '' : downPct + '% of price');
+    rows += lineRow('Maine transfer tax, buyer half', usd(tt.half), 'Seller pays the other ' + usd(tt.half));
+    if (!isCash) rows += lineRow('Lender and title fees', feesEntered ? usd(fees) : 'Ask Derek');
+    rows += lineRow('First year of homeowners insurance', usd(insYear));
+    if (!isCash) rows += lineRow('Escrow deposit, tax and insurance', usd(escrow), taxMo + ' mo tax, ' + insMo + ' mo insurance');
+    if (usableCredit > 0) rows += lineRow('Seller credit', '-' + usd(usableCredit));
+    if (emd > 0) rows += lineRow('Earnest money already paid', '-' + usd(emd));
+    rows += '<tr class="total"><td>Estimated cash to close</td><td>' + usd(total) + '</td></tr>';
+    $('c-lines').innerHTML = rows;
+    $('c-total').textContent = usd(Math.abs(total));
+    document.querySelector('#cash .result .label').textContent = total < 0 ? 'Estimated amount back to the buyer at closing' : 'Estimated cash to bring to closing';
+    const missing = [];
+    if (!downEntered) missing.push('down payment');
+    if (!feesEntered && !isCash) missing.push('lender and title fees');
+    $('c-note').textContent = missing.length ? 'Estimate only, before ' + missing.join(' and ') + '.' : 'Estimate only. Not a Loan Estimate.';
+    $('c-checks').innerHTML = checks.map((c) => '<li class="' + c[0] + '"><span class="tag">' + c[1] + '</span><span>' + esc(c[2]) + '</span></li>').join('');
+
+    const typeName = $('c-type').selectedOptions[0].textContent;
+    cashText = 'Rough cash to close, ' + typeName + ', ' + usd(price) + ' purchase:\n' +
+      (downEntered ? (isCash ? 'Price: ' : 'Down payment: ') + usd(down) + '\n' : '') +
+      'Maine transfer tax (buyer half): ' + usd(tt.half) + '\n' +
+      (!isCash ? 'Lender and title fees: ' + (feesEntered ? usd(fees) : 'not included yet') + '\n' : '') +
+      'First year insurance: ' + usd(insYear) + '\n' +
+      (!isCash ? 'Escrow deposit: ' + usd(escrow) + '\n' : '') +
+      (usableCredit > 0 ? 'Seller credit: -' + usd(usableCredit) + '\n' : '') +
+      (emd > 0 ? 'Earnest money paid: -' + usd(emd) + '\n' : '') +
+      'Estimated cash to close: ' + usd(total) + SIGN;
+  }
+
+  // ---------- 2. offers ----------
+  const TYPES = [['cash', 'Cash'], ['conv', 'Conventional'], ['fha', 'FHA'], ['va', 'VA'], ['usda', 'USDA']];
+  const SAMPLE = [
+    { name: 'Offer A', price: '440,000', type: 'fha', credit: '13,000', gap: '0', close: 45, insp: 'full' },
+    { name: 'Offer B', price: '432,000', type: 'conv', credit: '0', gap: '10,000', close: 30, insp: 'info' },
+    { name: 'Offer C', price: '418,000', type: 'cash', credit: '0', gap: '0', close: 14, insp: 'none' }
+  ];
+  function offerCard(o, i) {
+    const opts = TYPES.map((t) => '<option value="' + t[0] + '"' + (t[0] === o.type ? ' selected' : '') + '>' + t[1] + '</option>').join('');
+    const insp = [['full', 'Full contingency'], ['info', 'Informational only'], ['none', 'Waived']]
+      .map((t) => '<option value="' + t[0] + '"' + (t[0] === o.insp ? ' selected' : '') + '>' + t[1] + '</option>').join('');
+    return '<div class="offer" data-i="' + i + '">' +
+      '<h3><span>' + o.name + '</span><span class="best" hidden>Top net</span></h3>' +
+      '<div class="rows">' +
+      '<div class="row"><label for="o' + i + '-price">Price</label><input type="text" inputmode="numeric" id="o' + i + '-price" value="' + o.price + '"></div>' +
+      '<div class="row"><label for="o' + i + '-type">Financing</label><select id="o' + i + '-type">' + opts + '</select></div>' +
+      '<div class="row"><label for="o' + i + '-credit">Seller credit</label><input type="text" inputmode="numeric" id="o' + i + '-credit" value="' + o.credit + '"></div>' +
+      '<div class="row"><label for="o' + i + '-gap">Appraisal gap covered</label><input type="text" inputmode="numeric" id="o' + i + '-gap" value="' + o.gap + '"></div>' +
+      '<div class="row"><label for="o' + i + '-close">Days to close</label><input type="text" inputmode="numeric" id="o' + i + '-close" value="' + o.close + '"></div>' +
+      '<div class="row"><label for="o' + i + '-insp">Inspection</label><select id="o' + i + '-insp">' + insp + '</select></div>' +
+      '</div>' +
+      '<div class="net-label">Seller\'s estimated net, before payoff</div><div class="net" id="o' + i + '-net">$0</div>' +
+      '<table class="lines" id="o' + i + '-lines"></table>' +
+      '<ul class="checks" id="o' + i + '-checks"></ul>' +
+      '</div>';
+  }
+  $('o-list').innerHTML = SAMPLE.map(offerCard).join('');
+
+  let offerText = '';
+  function calcOffers() {
+    const comm = num($('o-comm').value) / 100;
+    const other = [...document.querySelectorAll('.scost')].reduce((s, el) => s + num(el.value), 0);
+    const apprEntered = has($('o-appr').value);
+    const appr = num($('o-appr').value);
+    const results = [];
+    SAMPLE.forEach((o, i) => {
+      const price = num($('o' + i + '-price').value);
+      if (!price) { $('o' + i + '-net').textContent = '-'; $('o' + i + '-lines').innerHTML = ''; $('o' + i + '-checks').innerHTML = ''; results.push(null); return; }
+      const type = $('o' + i + '-type').value;
+      const credit = num($('o' + i + '-credit').value);
+      const gap = num($('o' + i + '-gap').value);
+      const days = num($('o' + i + '-close').value);
+      const insp = $('o' + i + '-insp').value;
+      const tt = transferTax(price);
+      const commAmt = price * comm;
+      const net = price - credit - commAmt - tt.half - other;
+
+      const checks = [];
+      let worst = null;
+      if (apprEntered && type !== 'cash' && appr > 0 && appr < price) {
+        const short = price - appr;
+        const covered = Math.min(short, gap);
+        const newPrice = price - (short - covered);
+        const tt2 = transferTax(newPrice);
+        worst = newPrice - credit - newPrice * comm - tt2.half - other;
+        if (covered >= short) checks.push(['ok', '✓', 'Appraisal ' + usd(short) + ' short is covered by the buyer\'s gap money.']);
+        else checks.push(['warn', '!', 'If it appraises at ' + usd(appr) + ', the buyer is ' + usd(short - covered) + ' short after gap coverage. Price may need to drop, which puts the net near ' + usd(worst) + '.']);
+      }
+      const cap = concessionCap(type, 'primary', null);
+      if (credit > 0 && cap && cap.pct != null && !cap.va && credit > price * cap.pct / 100) {
+        checks.push(['warn', '!', 'Seller credit is over the ' + cap.pct + '% ' + (type === 'fha' ? 'FHA' : 'USDA') + ' limit (' + usd(price * cap.pct / 100) + '). The lender will cut it back.']);
+      }
+      if (credit > 0 && type === 'conv') checks.push(['info', 'i', 'Conventional credit limit is 3%, 6% or 9% depending on down payment. Confirm the buyer\'s down payment with their loan officer.']);
+      if (type === 'fha' || type === 'va') checks.push(['info', 'i', (type === 'fha' ? 'FHA' : 'VA') + ' appraisers check minimum property standards. Peeling paint, missing handrails or a dead heat source can turn into required repairs. See Property checks.']);
+      if (type === 'usda') checks.push(['info', 'i', 'USDA: the address must be in an eligible area and the buyer under the income limit. Loans also go through a USDA review, so leave room on the closing date.']);
+      if (type !== 'cash' && days > 0 && days < 25) checks.push(['warn', '!', days + ' days is tight for a financed deal. Ask the buyer\'s loan officer if the appraisal and underwriting can fit.']);
+      if (type === 'cash') checks.push(['ok', '✓', 'No appraisal or loan approval to wait on. Ask for proof of funds.']);
+      if (insp === 'full') checks.push(['info', 'i', 'Full inspection contingency: the most room for the buyer to renegotiate or walk.']);
+      if (insp === 'none') checks.push(['info', 'i', 'Inspection waived. Strong for the seller, but the lender\'s appraisal can still call for repairs on FHA or VA.']);
+
+      let rows = lineRow('Price', usd(price));
+      if (credit > 0) rows += lineRow('Seller credit', '-' + usd(credit));
+      if (commAmt > 0) rows += lineRow('Commission', '-' + usd(commAmt), (comm * 100).toFixed(2).replace(/\.?0+$/, '') + '%');
+      rows += lineRow('Maine transfer tax, seller half', '-' + usd(tt.half));
+      if (other > 0) rows += lineRow('Seller closing costs', '-' + usd(other), 'Title, deed, taxes, repairs and other');
+      if (worst != null) rows += lineRow('Net if it appraises at ' + usd(appr), usd(worst));
+      $('o' + i + '-lines').innerHTML = rows;
+      $('o' + i + '-net').textContent = usd(net);
+      $('o' + i + '-checks').innerHTML = checks.map((c) => '<li class="' + c[0] + '"><span class="tag">' + c[1] + '</span><span>' + esc(c[2]) + '</span></li>').join('');
+      results.push({ i, name: o.name, price, type, net, worst, days });
+    });
+    const valid = results.filter(Boolean);
+    const bestNet = Math.max(...valid.map((r) => r.worst != null ? r.worst : r.net));
+    document.querySelectorAll('.offer').forEach((el) => {
+      const r = results[+el.dataset.i];
+      el.querySelector('.best').hidden = !(r && (r.worst != null ? r.worst : r.net) === bestNet && valid.length > 1);
+    });
+    if (!has($('o-comm').value)) {
+      // nothing extra; commission line simply omitted
+    }
+    offerText = 'Offer comparison, estimated seller net before mortgage payoff:\n' +
+      valid.map((r) => r.name + ': ' + usd(r.price) + ' ' + TYPES.find((t) => t[0] === r.type)[1] + ', ' + r.days + ' days. Net about ' + usd(r.net) +
+        (r.worst != null ? ' (about ' + usd(r.worst) + ' if it appraises at ' + usd(appr) + ')' : '')).join('\n') +
+      '\nIncludes the seller half of Maine transfer tax' + (comm > 0 ? ', commission' : '') + ' and the seller closing costs entered. Mortgage payoff not included.' + SIGN;
+  }
+
+  // ---------- 3. property checks ----------
+  const ALL = ['conv', 'fha', 'va', 'usda'];
+  const NAME = { conv: 'Conventional', fha: 'FHA', va: 'VA', usda: 'USDA' };
+  const PROPS = [
+    { id: 'well', label: 'Private well', items: [
+      { who: ['va'], text: 'VA usually needs a water test on a private well, with the sample drawn by someone other than the buyer or seller. Order it early; lab results can take a week or more.' },
+      { who: ['usda'], text: 'USDA needs the water to be safe to drink, and most lenders ask for a water test. Plan on one.' },
+      { who: ['fha'], text: 'On an existing home, usually no water test is needed unless the appraiser flags the well, local rules require one, or it is new construction or a new well.' },
+      { who: ['conv'], text: 'Usually no water test unless the appraiser calls for one.' },
+      { who: ALL, text: 'Maine wells often show arsenic, radon or uranium. A buyer test is smart even when the loan does not require it. Treatment systems cost real money; know before the inspection deadline.' }
+    ]},
+    { id: 'septic', label: 'Septic system', items: [
+      { who: ['fha', 'va', 'usda'], text: 'The appraiser looks at well-to-septic distance. On FHA, a well generally needs to be about 50 feet from the septic tank and 100 feet from the leach field, unless local code says otherwise.' },
+      { who: ALL, text: 'A septic inspection is not a loan requirement for most programs unless the appraiser sees a problem, but it is cheap insurance on an older system.' }
+    ]},
+    { id: 'shore', label: 'Septic within the coastal shoreland zone', items: [
+      { who: ALL, text: 'Maine law requires the buyer to have the septic inspected by a certified inspector before buying (since 2020). Exceptions: system installed within 3 years, seller has a certified inspection within 3 years, or the buyer certifies it will be replaced within a year. Winter: the inspection can wait up to 9 months after closing. A failing system must be fixed within a year.' }
+    ]},
+    { id: 'mh', label: 'Manufactured or mobile home', items: [
+      { who: ALL, text: 'Has to be built after June 15, 1976, with the HUD data plate and certification labels, on a permanent foundation, and taxed and titled as real estate. Get the serial number and the HUD label numbers before the offer.' },
+      { who: ['fha'], text: 'FHA needs an engineer\'s foundation certification and the home cannot have been moved from another site.' },
+      { who: ['va', 'usda'], text: 'Foundation certification is usually required here too. Some lenders limit age or size; call before writing.' }
+    ]},
+    { id: 'condo', label: 'Condo', items: [
+      { who: ['fha'], text: 'The project must be FHA approved, or the unit needs a single-unit approval. Check the HUD condo list first.' },
+      { who: ['va'], text: 'The project must be on the VA approved condo list, or the lender has to get it approved, which adds time.' },
+      { who: ['conv', 'usda'], text: 'The lender reviews the association: budget, reserves, owner-occupancy, litigation and any big repairs. Ask the listing agent for the condo questionnaire and budget early.' }
+    ]},
+    { id: 'paint', label: 'Built before 1978 with chipping or peeling paint', items: [
+      { who: ['fha', 'va'], text: 'Defective paint is a required repair. Seller may need to scrape and paint before closing, done lead-safe.' },
+      { who: ['conv', 'usda'], text: 'Usually only an issue if the appraiser calls it a safety or soundness problem.' }
+    ]},
+    { id: 'repairs', label: 'Needs work or sold as-is', items: [
+      { who: ['fha', 'va', 'usda'], text: 'Health and safety items (roof, heat, electrical, water, broken steps) have to be fixed before closing. As-is sales often stall here.' },
+      { who: ALL, text: 'A renovation loan can roll repair costs into the purchase. Call Derek before the buyer passes on a fixer.' }
+    ]},
+    { id: 'heat', label: 'Wood stove or space heaters as the only heat', items: [
+      { who: ALL, text: 'Lenders want a permanent heat source that can keep the house livable, including the plumbing from freezing. Wood as the only heat can be a problem. Ask what backs it up.' }
+    ]},
+    { id: 'road', label: 'Private or shared road, or shared driveway', items: [
+      { who: ALL, text: 'Expect questions about legal access and who maintains the road. A recorded easement and road maintenance agreement make life easier. Ask the listing agent for the deed and any road association info.' }
+    ]},
+    { id: 'seasonal', label: 'Camp, seasonal access or no year-round road', items: [
+      { who: ALL, text: 'Year-round access and a year-round water supply matter for most loans. Seasonal camps often need a different loan or more down. Call before writing.' }
+    ]},
+    { id: 'flood', label: 'Near the water or in a flood zone', items: [
+      { who: ALL, text: 'If any part of the house is in a FEMA high-risk zone, flood insurance is required on the loan. Get a flood quote before the offer; it can change the buyer\'s budget a lot. Check at msc.fema.gov.' }
+    ]},
+    { id: 'acre', label: 'Lots of acreage, barns or farm use', items: [
+      { who: ALL, text: 'Appraisers value the home and a typical lot. Extra land or outbuildings may get little value, and income from farming does not count for the loan.' },
+      { who: ['usda'], text: 'USDA can work for rural homes, but the property cannot be income-producing farmland.' }
+    ]},
+    { id: 'multi', label: '2 to 4 units', items: [
+      { who: ['fha', 'va'], text: 'The buyer must live in one unit. On 3 to 4 units with FHA, rent from the other units has to pass a self-sufficiency test.' },
+      { who: ['conv'], text: 'Owner-occupied 2 to 4 units work. Rent schedules and current leases help; get them from the listing agent.' },
+      { who: ['usda'], text: 'USDA is for single-family homes; 2 to 4 units generally do not qualify.' }
+    ]},
+    { id: 'solar', label: 'Solar panels', items: [
+      { who: ALL, text: 'Owned outright is easy. Leased panels or a power purchase agreement need the contract reviewed by the lender. Ask the seller for it now.' }
+    ]},
+    { id: 'tank', label: 'Oil tank, especially buried', items: [
+      { who: ALL, text: 'Buried tanks can be an insurance and lender issue. Ask the age and if it has been tested or removed. Some insurers will not cover an old tank.' }
+    ]},
+    { id: 'rural', label: 'Rural town, buyer has little cash', items: [
+      { who: ['usda'], text: 'Check the address on the USDA eligibility map (eligibility.sc.egov.usda.gov). Lots of Maine qualifies outside the bigger towns.' },
+      { who: ['conv', 'fha', 'va'], text: 'Ask Derek about USDA and Maine programs for buyers short on cash.' }
+    ]}
+  ];
+  const DEFAULT_ON = ['well', 'septic', 'paint'];
+  $('p-list').innerHTML = PROPS.map((p) => '<label><input type="checkbox" id="p-' + p.id + '" value="' + p.id + '"' + (DEFAULT_ON.includes(p.id) ? ' checked' : '') + '><span>' + esc(p.label) + '</span></label>').join('');
+
+  let propText = '';
+  function calcProps() {
+    const loans = [...document.querySelectorAll('#p-loans input:checked')].map((x) => x.value);
+    const picked = PROPS.filter((p) => $('p-' + p.id).checked);
+    let html = '', text = 'Before the offer, things to sort out on this property' + (loans.length ? ' (' + loans.map((l) => NAME[l]).join(', ') + ')' : '') + ':\n';
+    picked.forEach((p) => {
+      const items = p.items.filter((it) => it.who.some((w) => loans.includes(w)));
+      if (!items.length) return;
+      html += '<div class="flag"><h4>' + esc(p.label) + '</h4>' + items.map((it) => {
+        const who = it.who.length === 4 ? 'All loans' : it.who.filter((w) => loans.includes(w)).map((w) => NAME[w]).join(', ');
+        return '<p><span class="who">' + esc(who) + ':</span> ' + esc(it.text) + '</p>';
+      }).join('') + '</div>';
+      text += '\n' + p.label.toUpperCase() + '\n' + items.map((it) => '- ' + it.text).join('\n') + '\n';
+    });
+    if (!html) html = '<p class="empty">' + (loans.length ? 'Tick a property feature on the left to see what to sort out.' : 'Pick at least one loan type.') + '</p>';
+    $('p-flags').innerHTML = html;
+    propText = text + SIGN.replace('Estimate only, not a Loan Estimate or commitment to lend.', 'General guidance only; requirements vary by lender and program.');
+  }
+
+  // ---------- copy buttons ----------
+  function wireCopy(btn, getText, okEl, fallback) {
+    $(btn).addEventListener('click', () => {
+      const t = getText();
+      const show = () => { $(okEl).hidden = false; setTimeout(() => { $(okEl).hidden = true; }, 3000); };
+      const fall = () => { const f = $(fallback); f.hidden = false; f.value = t; f.focus(); f.select(); };
+      try {
+        navigator.clipboard.writeText(t).then(show, fall);
+      } catch (e) { fall(); }
+    });
+  }
+  wireCopy('c-copy', () => cashText, 'c-copied', 'c-fallback');
+  wireCopy('o-copy', () => offerText, 'o-copied', 'o-fallback');
+  wireCopy('p-copy', () => propText, 'p-copied', 'p-fallback');
+
+  // ---------- tabs ----------
+  const tabs = [...document.querySelectorAll('nav.tabs button')];
+  function openTab(id) {
+    tabs.forEach((t) => {
+      const on = t.getAttribute('aria-controls') === id;
+      t.setAttribute('aria-selected', on);
+      $(t.getAttribute('aria-controls')).hidden = !on;
+    });
+    try { localStorage.setItem('mod-tab', id); } catch (e) {}
+  }
+  tabs.forEach((t) => t.addEventListener('click', () => openTab(t.getAttribute('aria-controls'))));
+  const fromHash = (location.hash || '').slice(1);
+  let start = ['cash', 'offers', 'property'].includes(fromHash) ? fromHash : null;
+  if (!start) { try { start = localStorage.getItem('mod-tab'); } catch (e) {} }
+  if (['cash', 'offers', 'property'].includes(start)) openTab(start);
+
+  // money fields: tidy commas on blur
+  document.addEventListener('focusout', (e) => {
+    const el = e.target;
+    if (el.tagName === 'INPUT' && el.type === 'text' && el.getAttribute('inputmode') === 'numeric' && has(el.value) && !/close|taxmo|insmo/.test(el.id)) {
+      el.value = Math.round(num(el.value)).toLocaleString('en-US');
+    }
+  });
+  document.addEventListener('input', () => { calcCash(); calcOffers(); calcProps(); });
+  document.addEventListener('change', () => { calcCash(); calcOffers(); calcProps(); });
+  calcCash(); calcOffers(); calcProps();
+})();
+</script>
+
+<script>
+if ('serviceWorker' in navigator) { window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js').catch(() => {}); }); }
+</script>
+</body>
+</html>
